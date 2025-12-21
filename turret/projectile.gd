@@ -19,6 +19,9 @@ func _on_destroy_timer_timeout() -> void:
 	queue_free()
 
 func _on_area_entered(area: Area3D) -> void:
-	if area.is_in_group("enemy"):
-		area.get_parent().health -= damage
+	# if area.is_in_group("enemy"):
+	# 	area.get_parent().health -= damage
+	# 	queue_free()
+	if area is HurtBox:
+		area.take_damage(damage)
 		queue_free()
