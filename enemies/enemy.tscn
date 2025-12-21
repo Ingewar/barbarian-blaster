@@ -1,6 +1,7 @@
-[gd_scene load_steps=4 format=3 uid="uid://cja76dephjvvl"]
+[gd_scene load_steps=5 format=3 uid="uid://cja76dephjvvl"]
 
 [ext_resource type="Script" uid="uid://crggcun88fddy" path="res://enemies/enemy.gd" id="1_fw1ev"]
+[ext_resource type="Script" uid="uid://c8frs8p6mh3r1" path="res://components/hurt_box.gd" id="2_7frlh"]
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_bo3yr"]
 
@@ -14,8 +15,12 @@ script = ExtResource("1_fw1ev")
 transform = Transform3D(0.9999999, 0, 2.2351742e-08, 0, 1, 0, -2.2351742e-08, 0, 0.9999999, 0, 1.2, 0)
 mesh = SubResource("CapsuleMesh_bo3yr")
 
-[node name="EnemyHurtBox" type="Area3D" parent="." groups=["enemy"]]
+[node name="HurtBox" type="Area3D" parent="."]
+script = ExtResource("2_7frlh")
+metadata/_custom_type_script = "uid://c8frs8p6mh3r1"
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="EnemyHurtBox"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="HurtBox"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 shape = SubResource("CapsuleShape3D_fw1ev")
+
+[connection signal="damage_taken" from="HurtBox" to="." method="_on_damage_taken"]

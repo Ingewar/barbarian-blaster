@@ -31,3 +31,7 @@ func _process(delta: float) -> void:
 func die() -> void:
 	queue_free()
 
+
+
+func _on_damage_taken(damage_value: int) -> void:
+	health -= damage_value
