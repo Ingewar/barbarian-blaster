@@ -1,0 +1,134 @@
+[gd_scene load_steps=12 format=3 uid="uid://dtcnxxofouqf8"]
+
+[ext_resource type="PackedScene" uid="uid://bdsfw7wypncoj" path="res://ray_picker_camera/ray_picker_camera.tscn" id="1_3o4py"]
+[ext_resource type="MeshLibrary" uid="uid://h0fotgstmkfn" path="res://mesh_libraries/space_library.tres" id="1_bo3yr"]
+[ext_resource type="PackedScene" uid="uid://cja76dephjvvl" path="res://enemies/enemy.tscn" id="2_5vx1e"]
+[ext_resource type="PackedScene" uid="uid://dmp15xq1xg24g" path="res://base/base.tscn" id="3_eesb3"]
+[ext_resource type="Script" uid="uid://bsjogxvyjj8tp" path="res://turret_manager.gd" id="5_ftfrf"]
+[ext_resource type="PackedScene" uid="uid://dbspp2x4poqh7" path="res://turret/turret.tscn" id="6_u2wky"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_4sal3"]
+sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
+ground_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
+
+[sub_resource type="Sky" id="Sky_bo3yr"]
+sky_material = SubResource("ProceduralSkyMaterial_4sal3")
+
+[sub_resource type="Environment" id="Environment_5vx1e"]
+background_mode = 2
+sky = SubResource("Sky_bo3yr")
+tonemap_mode = 2
+glow_enabled = true
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_bo3yr"]
+albedo_color = Color(0.2574758, 0.25747576, 0.25747573, 1)
+
+[sub_resource type="Curve3D" id="Curve3D_bo3yr"]
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, -20.573124, 0, 1.7749251, -1, 0, 1, 1, 0, -1, -10.5, 0, 1.8, -1, 0, 1, 1, 0, -1, -10.490159, 0, -9.728646, -1, 0, -1, 1, 0, 1, 1.8872309, 0, -9.686585, -1, 0, -1, 1, 0, 1, 2.3078356, 0, 1.8169854, -1, 0, 1, 1, 0, -1, 10.436253, 0, 1.7641972, -1, 0, 1, 1, 0, -1, 10.488622, 0, -5.859072, 0, 0, 0, 0, 0, 0, 17.90168, 0, -5.8078184),
+"tilts": PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0)
+}
+point_count = 8
+
+[node name="level" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_5vx1e")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.8660254, -0.43301278, 0.25, 0, 0.49999997, 0.86602545, -0.50000006, 0.75, -0.43301266, 0, 0, 0)
+shadow_enabled = true
+
+[node name="CSGBox3D" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.15229869, -0.9033041, -0.4169469)
+size = Vector3(100, 2, 100)
+material = SubResource("StandardMaterial3D_bo3yr")
+
+[node name="RayPickerCamera" parent="." node_paths=PackedStringArray("turret_manager") instance=ExtResource("1_3o4py")]
+transform = Transform3D(1, 0, 0, 0, 0.42261824, 0.9063078, 0, -0.9063078, 0.42261824, 0, 14.5, 9.5)
+turret_manager = NodePath("../turret_manager")
+
+[node name="GridMap" type="GridMap" parent="."]
+mesh_library = ExtResource("1_bo3yr")
+cell_size = Vector3(4, 2, 4)
+cell_center_y = false
+data = {
+"cells": PackedInt32Array(31, 65521, 196608, 65532, 65535, 524288, 65532, 65534, 524288, 65532, 65533, 524288, 65532, 65532, 524288, 65533, 65532, 524288, 65534, 65532, 524288, 65535, 65532, 524288, 0, 65532, 524288, 1, 65532, 524288, 1, 65533, 524288, 1, 65534, 524288, 1, 65535, 524288, 2, 65533, 524288, 3, 65533, 524288, 4, 65533, 524288, 4, 65535, 524288, 3, 65535, 524288, 3, 0, 524288, 3, 1, 524288, 2, 1, 524288, 1, 1, 524288, 0, 1, 524288, 65535, 1, 524288, 65534, 1, 524288, 65534, 0, 524288, 65534, 65535, 524288, 65534, 65534, 524288, 65535, 65534, 524288, 65535, 65535, 524288, 65535, 0, 524288, 65532, 1, 524288, 65533, 1, 524288)
+}
+
+[node name="Path3D" type="Path3D" parent="."]
+curve = SubResource("Curve3D_bo3yr")
+
+[node name="RoadVisual" type="CSGPolygon3D" parent="Path3D"]
+polygon = PackedVector2Array(-1, 0, -1, 0.1, 1, 0.1, 1, 0)
+mode = 2
+path_node = NodePath("..")
+path_interval_type = 0
+path_interval = 0.5
+path_simplify_angle = 0.0
+path_rotation = 2
+path_rotation_accurate = false
+path_local = false
+path_continuous_u = true
+path_u_distance = 1.0
+path_joined = false
+
+[node name="LeftRoadSide" type="CSGPolygon3D" parent="Path3D"]
+polygon = PackedVector2Array(-1.1, 0, -1.1, 0.15, -0.9, 0.15, -0.9, 0)
+mode = 2
+path_node = NodePath("..")
+path_interval_type = 0
+path_interval = 0.5
+path_simplify_angle = 0.0
+path_rotation = 2
+path_rotation_accurate = false
+path_local = false
+path_continuous_u = true
+path_u_distance = 1.0
+path_joined = false
+
+[node name="RightRoadSide" type="CSGPolygon3D" parent="Path3D"]
+polygon = PackedVector2Array(1.1, 0, 1.1, 0.15, 0.9, 0.15, 0.9, 0)
+mode = 2
+path_node = NodePath("..")
+path_interval_type = 0
+path_interval = 0.5
+path_simplify_angle = 0.0
+path_rotation = 2
+path_rotation_accurate = false
+path_local = false
+path_continuous_u = true
+path_u_distance = 1.0
+path_joined = false
+
+[node name="Enemy" parent="Path3D" instance=ExtResource("2_5vx1e")]
+transform = Transform3D(0.99994814, 0, 0.009902937, 0, 1, 0, -0.009902937, 0, 0.99994814, -10.779256, 0, -7.962805)
+progress = 20.0
+speed = 5.0
+
+[node name="Enemy2" parent="Path3D" instance=ExtResource("2_5vx1e")]
+transform = Transform3D(0.9959096, 0, 0.09035505, 0, 1, 0, -0.09035505, 0, 0.9959096, -10.403349, 0, -2.9774115)
+progress = 15.0
+speed = 5.0
+
+[node name="Enemy3" parent="Path3D" instance=ExtResource("2_5vx1e")]
+transform = Transform3D(0.4945571, 0, -0.86914504, 0, 1, 0, 0.86914504, 0, 0.4945571, -10.630554, 0, 1.8957053)
+progress = 10.0
+speed = 5.0
+
+[node name="Enemy4" parent="Path3D" instance=ExtResource("2_5vx1e")]
+transform = Transform3D(-0.049655195, 0, -0.99876636, 0, 1, 0, 0.99876636, 0, -0.049655195, -15.590172, 0, 2.1792772)
+progress = 5.0
+speed = 5.0
+
+[node name="Enemy5" parent="Path3D" instance=ExtResource("2_5vx1e")]
+transform = Transform3D(-0.11226521, 0, -0.9936782, 0, 1, 0, 0.9936782, 0, -0.11226521, -20.573124, 0, 1.7749251)
+speed = 5.0
+
+[node name="Base" parent="." instance=ExtResource("3_eesb3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.494568, -0.3006134, -5.487776)
+
+[node name="turret_manager" type="Node3D" parent="." node_paths=PackedStringArray("path")]
+script = ExtResource("5_ftfrf")
+turret = ExtResource("6_u2wky")
+path = NodePath("../Path3D")

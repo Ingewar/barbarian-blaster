@@ -1,0 +1,50 @@
+[gd_scene load_steps=7 format=3 uid="uid://dbspp2x4poqh7"]
+
+[ext_resource type="Script" uid="uid://d24uj6pu3cwei" path="res://turret/turret.gd" id="1_vfthy"]
+[ext_resource type="PackedScene" uid="uid://fhyylqojrknj" path="res://turret/projectile.tscn" id="2_2876l"]
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_pweg5"]
+height = 0.5
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_vfthy"]
+top_radius = 0.6
+bottom_radius = 0.6
+height = 0.6
+
+[sub_resource type="BoxMesh" id="BoxMesh_pweg5"]
+size = Vector3(0.5, 0.3, 0.3)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_2876l"]
+top_radius = 0.1
+bottom_radius = 0.1
+height = 0.8
+
+[node name="Turret" type="Node3D"]
+script = ExtResource("1_vfthy")
+projectile = ExtResource("2_2876l")
+
+[node name="turret_base" type="MeshInstance3D" parent="."]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 0.25, 0)
+mesh = SubResource("CylinderMesh_pweg5")
+
+[node name="turret_top" type="MeshInstance3D" parent="turret_base"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3, 0)
+mesh = SubResource("CylinderMesh_vfthy")
+
+[node name="barrel_base" type="MeshInstance3D" parent="turret_base/turret_top"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.60910785)
+mesh = SubResource("BoxMesh_pweg5")
+
+[node name="barrel" type="MeshInstance3D" parent="turret_base/turret_top/barrel_base"]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0.5077194)
+mesh = SubResource("CylinderMesh_2876l")
+skeleton = NodePath("../..")
+
+[node name="projectile_spawn_point" type="Marker3D" parent="turret_base/turret_top/barrel_base/barrel"]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0.601105, 0.011989355)
+
+[node name="ShotTimer" type="Timer" parent="."]
+autostart = true
+
+[connection signal="timeout" from="ShotTimer" to="." method="_on_shot_timer_timeout"]
