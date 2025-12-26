@@ -102,7 +102,7 @@ path_u_distance = 1.0
 path_joined = false
 
 [node name="Enemy" parent="Path3D" instance=ExtResource("2_5vx1e")]
-transform = Transform3D(0.99994785, 0, 0.009902935, 0, 1, 0, -0.009902935, 0, 0.99994785, -10.779256, 0, -7.962805)
+transform = Transform3D(0.99994755, 0, 0.009902932, 0, 1, 0, -0.009902932, 0, 0.99994755, -10.779256, 0, -7.962805)
 progress = 20.0
 speed = 5.0
 
