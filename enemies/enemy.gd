@@ -8,6 +8,8 @@ signal health_changed(health: int)
 @export var damage := 1
 @export var max_health := 2
 
+@onready var animation_player: AnimationPlayer = $AnimationPlayer
+
 # Public variables
 var health := max_health:
 	set(value):
@@ -15,6 +17,8 @@ var health := max_health:
 		health_changed.emit(health)
 		if health <= 0:
 			die()
+	get:
+		return health
 
 # Onready variables
 @onready var base = get_tree().get_first_node_in_group("base")
@@ -31,7 +35,6 @@ func _process(delta: float) -> void:
 func die() -> void:
 	queue_free()
 
-
-
 func _on_damage_taken(damage_value: int) -> void:
 	health -= damage_value
+	animation_player.play("TakeDamage")

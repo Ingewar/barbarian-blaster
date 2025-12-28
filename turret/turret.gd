@@ -11,6 +11,7 @@ var target: PathFollow3D
 # Onready variables
 @onready var shot_timer: Timer = $ShotTimer
 @onready var projectile_spawn_point: Marker3D = %projectile_spawn_point
+@onready var animation_player: AnimationPlayer = $AnimationPlayer
 
 # Built-in methods
 func _physics_process(_delta: float) -> void:
@@ -26,6 +27,8 @@ func _on_shot_timer_timeout() -> void:
 	get_tree().root.add_child(shot)
 	shot.global_position = projectile_spawn_point.global_position
 	shot.direction = -global_transform.basis.z
+	animation_player.play("fire")
+
 
 func find_best_target() -> PathFollow3D:
 	var enemies = path.get_tree().get_nodes_in_group("enemy")
@@ -33,7 +36,7 @@ func find_best_target() -> PathFollow3D:
 		return null
 
 	# First, filter enemies by distance (within turret range)
-	var enemies_in_range: Array = [PathFollow3D]
+	var enemies_in_range: Array[PathFollow3D] = []
 	for enemy in enemies:
 		if enemy is PathFollow3D:
 			var distance := global_position.distance_to(enemy.global_position)

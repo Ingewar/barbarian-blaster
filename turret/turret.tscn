@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://dbspp2x4poqh7"]
+[gd_scene load_steps=10 format=3 uid="uid://dbspp2x4poqh7"]
 
 [ext_resource type="Script" uid="uid://d24uj6pu3cwei" path="res://turret/turret.gd" id="1_vfthy"]
 [ext_resource type="PackedScene" uid="uid://fhyylqojrknj" path="res://turret/projectile.tscn" id="2_2876l"]
@@ -19,6 +19,43 @@ top_radius = 0.1
 bottom_radius = 0.1
 height = 0.8
 
+[sub_resource type="Animation" id="Animation_2876l"]
+resource_name = "fire"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("turret_base/turret_top/barrel_base/barrel:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0, 0, 0.5)]
+}
+
+[sub_resource type="Animation" id="Animation_1p48p"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("turret_base/turret_top/barrel_base/barrel:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0.5)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_1p48p"]
+_data = {
+&"RESET": SubResource("Animation_1p48p"),
+&"fire": SubResource("Animation_2876l")
+}
+
 [node name="Turret" type="Node3D"]
 script = ExtResource("1_vfthy")
 projectile = ExtResource("2_2876l")
@@ -36,7 +73,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.60910785)
 mesh = SubResource("BoxMesh_pweg5")
 
 [node name="barrel" type="MeshInstance3D" parent="turret_base/turret_top/barrel_base"]
-transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0.5077194)
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0.5)
 mesh = SubResource("CylinderMesh_2876l")
 skeleton = NodePath("../..")
 
@@ -46,5 +83,10 @@ transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0
 
 [node name="ShotTimer" type="Timer" parent="."]
 autostart = true
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_1p48p")
+}
 
 [connection signal="timeout" from="ShotTimer" to="." method="_on_shot_timer_timeout"]
