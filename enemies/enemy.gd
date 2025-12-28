@@ -4,7 +4,7 @@ extends PathFollow3D
 signal health_changed(health: int)
 
 # Exported variables
-@export var speed := 1.0
+@export var speed := 5.0
 @export var damage := 1
 @export var max_health := 2
 
