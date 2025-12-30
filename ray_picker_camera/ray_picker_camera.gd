@@ -4,6 +4,10 @@ extends Camera3D
 @export var ray_length := 100.0
 @export var turret_manager: TurretManager
 
+# Random variable that shouldn't be here but in the Tutorial they were added here
+@export var hud : HUD
+@export var turret_cost := 10
+
 # Onready variables
 @onready var ray_cast_3d: RayCast3D = $RayCast3D
 
@@ -13,7 +17,7 @@ func _process(_delta: float) -> void:
 	ray_cast_3d.target_position = project_local_ray_normal(mouse_position) * ray_length
 	ray_cast_3d.force_raycast_update()
 
-	if ray_cast_3d.get_collider() is GridMap:
+	if ray_cast_3d.get_collider() is GridMap && hud.gold >= turret_cost:
 		Input.set_default_cursor_shape(Input.CURSOR_POINTING_HAND)
 		if Input.is_action_just_pressed("click"):
 			_handle_grid_click()
@@ -30,4 +34,4 @@ func _handle_grid_click() -> void:
 		grid_map.set_cell_item(cell, 1)
 		var tile_position := grid_map.map_to_local(cell)
 		turret_manager.build_turret(tile_position)
-		
+		hud.gold -= turret_cost
